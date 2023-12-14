@@ -13,3 +13,4 @@ endmacro()
 
 
 add_test_TLM(truncation) #
+add_test_TLM(beaver)
