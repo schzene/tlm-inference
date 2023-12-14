@@ -12,4 +12,4 @@ macro (add_test_HE _name)
 endmacro()
 
 
-add_test_TLM(truncation) # 本地截断
+add_test_TLM(truncation) #
