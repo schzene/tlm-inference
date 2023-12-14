@@ -14,8 +14,8 @@ void test_matrix_multiplication(vector<vector<uint64_t>> &X,
                                 uint64_t a, uint64_t b, uint64_t c)
 
 {
-    LinearBeaver *prod;
-    prod->matrix_multiplication(X, Y, a, b, c);
+    // LinearBeaver *prod;
+    // prod->matrix_multiplication(X, Y, a, b, c);
 }
 
 int main(int argc, char **argv)
