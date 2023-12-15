@@ -34,8 +34,8 @@ find_dependency(GMP REQUIRED)
 find_dependency(Threads REQUIRED)
 
 set_and_check(INSTALL_DIR "${PACKAGE_PREFIX_DIR}")
-find_dependency(Eigen3 REQUIRED PATHS "/home/tlm-inference/build/../extern/eigen/build" NO_DEFAULT_PATH)
-find_dependency(SEAL REQUIRED PATHS "/home/tlm-inference/build" NO_DEFAULT_PATH)
+find_dependency(Eigen3 REQUIRED PATHS "/root/TLM-inference/build/../extern/eigen/build" NO_DEFAULT_PATH)
+find_dependency(SEAL REQUIRED PATHS "/root/TLM-inference/build" NO_DEFAULT_PATH)
 find_dependency(OpenMP REQUIRED)
 
 # Add the targets file
