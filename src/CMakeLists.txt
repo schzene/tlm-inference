@@ -31,6 +31,7 @@ add_subdirectory(LinearOT)
 add_subdirectory(NonLinear)
 add_subdirectory(Math)
 add_subdirectory(FixedPoint)
+add_subdirectory(FloatPoint)
 
 add_library(SCI-common INTERFACE)
 
@@ -49,12 +50,14 @@ target_include_directories(SCI-common
 )
 
 add_library(SCI-TLM library_fixed.cpp globals.cpp)
+
 add_library(SCI-HE globals.cpp)
 
 
 target_link_libraries(SCI-TLM PUBLIC SCI-common SCI-GC
-    SCI-Math SCI-BuildingBlocks SCI-FixedPoint Eigen3::Eigen)
+    SCI-Math SCI-BuildingBlocks SCI-FixedPoint SCI-FloatPoint Eigen3::Eigen)
 target_link_libraries(SCI-HE PUBLIC SCI-common SCI-LinearHE)
+
 
 
 target_compile_definitions(SCI-TLM PUBLIC SCI_TLM=1)
@@ -65,6 +68,7 @@ install(TARGETS
         SCI-TLM
         SCI-common
         SCI-FixedPoint
+        SCI-FloatPoint
         SCI-BuildingBlocks
         SCI-LinearOT
         SCI-LinearHE
@@ -98,6 +102,7 @@ install(DIRECTORY
         LinearHE
         Math
         FixedPoint
+        FloatPoint
         DESTINATION include
         FILES_MATCHING
         PATTERN "*.h"
