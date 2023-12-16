@@ -1,18 +1,18 @@
 #ifndef LINEAR_BEAVER_H
 #define LINEAR_BEAVER_H
-#include "utils/io_pack.h"
 #include "LinearBeaver/beaver.h"
+#include "utils/io_pack.h"
 #include <numeric>
 #include <vector>
 
 inline uint64_t sum(uint64_t *v, size_t size) {
-    return accumulate(v, v + size, 0);
+    return std::accumulate(v, v + size, 0);
 }
 
-inline vector<uint64_t *> T(vector<uint64_t *> M, size_t column) {
+inline std::vector<uint64_t *> T(std::vector<uint64_t *> M, size_t column) {
     auto row = M.size();
     size_t i, j;
-    vector<uint64_t *> result = vector<uint64_t *>(column);
+    std::vector<uint64_t *> result = std::vector<uint64_t *>(column);
     for (i = 0; i < column; i++) {
         result[i] = new uint64_t[row];
     }
@@ -24,9 +24,9 @@ inline vector<uint64_t *> T(vector<uint64_t *> M, size_t column) {
     return result;
 }
 
-inline vector<uint64_t *> copy(vector<uint64_t *> M, size_t column) {
+inline std::vector<uint64_t *> copy(std::vector<uint64_t *> M, size_t column) {
     size_t i, j;
-    vector<uint64_t *> result = vector<uint64_t *>(M.size());
+    std::vector<uint64_t *> result = std::vector<uint64_t *>(M.size());
     for (i = 0; i < result.size(); i++) {
         result[i] = new uint64_t[column];
     }
@@ -110,19 +110,19 @@ public:
         return s;
     };
 
-    vector<uint64_t*> matrix_multiplication(vector<uint64_t*> X, size_t X_column,
-                                            vector<uint64_t*> Y, size_t Y_column,
-                                            uint64_t a, uint64_t b, uint64_t c) {
+    std::vector<uint64_t *> matrix_multiplication(std::vector<uint64_t *> X, size_t X_column,
+                                                  std::vector<uint64_t *> Y, size_t Y_column,
+                                                  uint64_t a, uint64_t b, uint64_t c) {
         assert(X_column == Y.size() || X_column == Y_column);
-        vector<uint64_t*> Y_T;
+        std::vector<uint64_t *> Y_T;
         if (X_column == Y.size()) {
             Y_T = T(Y, Y_column);
         } else {
             Y_T = copy(Y, Y_column);
         }
 
-        size_t i, j, k ;
-        vector<uint64_t*> Z = vector<uint64_t*>(X.size());
+        size_t i, j;
+        std::vector<uint64_t *> Z = std::vector<uint64_t *>(X.size());
         for (i = 0; i < Z.size(); i++) {
             Z[i] = new uint64_t[Y_T.size()];
         }
@@ -131,7 +131,7 @@ public:
                 Z[i][j] = sum(vector_multiplication(X[i], Y_T[j], X_column, a, b, c), X_column);
             }
         }
-        for (auto ptr: Y_T) {
+        for (auto ptr : Y_T) {
             delete[] ptr;
         }
         Y_T.clear();
