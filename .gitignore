@@ -1,8 +1,8 @@
 # Build Directory
 build/
-.vscode
-extern
-SEAL
-.inp
-.pyc
+.vscode/
+eigen/
+SEAL/
+*.inp
+*.pyc
 __pycache__
