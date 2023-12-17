@@ -4,3 +4,4 @@ build/
 extern
 SEAL
 .inp
+.pyc
