@@ -24,6 +24,7 @@ def input2secret(data):
 
 def main():
     fileutils = file_utils.file_utils()
+    
     file = "test_ring_beaver.inp"
     inputdata = fileutils.read_inpdata(file)
 
