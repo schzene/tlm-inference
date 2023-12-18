@@ -14,7 +14,7 @@ inline void add(uint64_t &num, uint64_t *v, uint64_t size) {
     add(v, size, num);
 }
 
-inline void sub(uint64_t *v, uint64_t size, uint64_t &num) {
+inline void sub(uint64_t *v, uint64_t size, uint64_t num) {
     for (size_t i = 0; i < size; i++) {
         v[i] = v[i] - num;
     }

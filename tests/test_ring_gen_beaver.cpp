@@ -4,11 +4,9 @@ using namespace std;
 
 int main() {
     auto b_v = beaver();
-    cout << "a1 = " << b_v[0] << "\n";
-    cout << "b1 = " << b_v[2] << "\n";
-    cout << "c1 = " << b_v[4] << "\n\n";
-    cout << "a2 = " << b_v[1] << "\n";
-    cout << "b2 = " << b_v[3] << "\n";
-    cout << "c2 = " << b_v[5] << "\n\n";
+    cout << "Alice: \n";
+    printf("a=%ld b=%ld c=%ld\n", b_v[0], b_v[2], b_v[4]);
+    cout << "\nBob: \n";
+    printf("a=%ld b=%ld c=%ld\n", b_v[1], b_v[3], b_v[5]);
     delete[] b_v;
 }

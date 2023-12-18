@@ -2,37 +2,41 @@
 #define LINEAR_BEAVER_H
 #include "LinearBeaver/beaver.h"
 #include "utils/io_pack.h"
+#include <cstdlib>
 #include <numeric>
-#include <vector>
+
+void show(uint64_t *mat, size_t row, size_t column) {
+    size_t i, j;
+    for (i = 0; i < row; i++) {
+        for (j = 0; j < column; j++) {
+            std::cout << mat[i * column + j] << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n";
+}
 
 inline uint64_t sum(uint64_t *v, size_t size) {
     return std::accumulate(v, v + size, 0);
 }
 
-inline std::vector<uint64_t *> T(std::vector<uint64_t *> M, size_t column) {
-    auto row = M.size();
+inline uint64_t *T(uint64_t *M, size_t row, size_t column) {
     size_t i, j;
-    std::vector<uint64_t *> result = std::vector<uint64_t *>(column);
-    for (i = 0; i < column; i++) {
-        result[i] = new uint64_t[row];
-    }
+    uint64_t *result = new uint64_t[row * column];
     for (i = 0; i < row; i++) {
         for (j = 0; j < column; j++) {
-            result[j][i] = M[i][j];
+            result[j * row + i] = M[i * column + j];
         }
     }
     return result;
 }
 
-inline std::vector<uint64_t *> copy(std::vector<uint64_t *> M, size_t column) {
+inline uint64_t *copy(uint64_t *M, size_t row, size_t column) {
     size_t i, j;
-    std::vector<uint64_t *> result = std::vector<uint64_t *>(M.size());
-    for (i = 0; i < result.size(); i++) {
-        result[i] = new uint64_t[column];
-    }
-    for (i = 0; i < result.size(); i++) {
+    uint64_t *result = new uint64_t[row * column];
+    for (i = 0; i < row; i++) {
         for (j = 0; j < column; j++) {
-            result[i][j] = M[i][j];
+            result[i * column + j] = M[i * column + j];
         }
     }
     return result;
@@ -50,6 +54,14 @@ uint64_t *mul(uint64_t *v1, uint64_t *v2, size_t size) {
     auto result = new uint64_t[size];
     for (size_t i = 0; i < size; i++) {
         result[i] = v1[i] * v2[i];
+    }
+    return result;
+}
+
+uint64_t dot(uint64_t *v1, uint64_t *v2, size_t size) {
+    uint64_t result = 0;
+    for (size_t i = 0; i < size; i++) {
+        result += v1[i] * v2[i];
     }
     return result;
 }
@@ -91,7 +103,6 @@ public:
             s1[i] = s[i];
             t1[i] = t[i];
         }
-
         mul(t, size, a);             // at
         mul(s, size, b);             // bs
         auto st = mul(s1, t1, size); // st
@@ -110,31 +121,47 @@ public:
         return s;
     };
 
-    std::vector<uint64_t *> matrix_multiplication(std::vector<uint64_t *> X, size_t X_column,
-                                                  std::vector<uint64_t *> Y, size_t Y_column,
-                                                  uint64_t a, uint64_t b, uint64_t c) {
-        assert(X_column == Y.size() || X_column == Y_column);
-        std::vector<uint64_t *> Y_T;
-        if (X_column == Y.size()) {
-            Y_T = T(Y, Y_column);
-        } else {
-            Y_T = copy(Y, Y_column);
-        }
-
+    uint64_t *matrix_multiplication(uint64_t *X, uint64_t *Y,
+                                          size_t dim1, size_t dim2, size_t dim3,
+                                          uint64_t a, uint64_t b, uint64_t c) {
         size_t i, j;
-        std::vector<uint64_t *> Z = std::vector<uint64_t *>(X.size());
-        for (i = 0; i < Z.size(); i++) {
-            Z[i] = new uint64_t[Y_T.size()];
+        uint64_t *s = new uint64_t[dim1 * dim2];
+        for (i = 0; i < dim1 * dim2; i++) {
+            s[i] = X[i];
         }
-        for (i = 0; i < X.size(); i++) {
-            for (j = 0; j < Y_T.size(); j++) {
-                Z[i][j] = sum(vector_multiplication(X[i], Y_T[j], X_column, a, b, c), X_column);
+        uint64_t *t = T(Y, dim2, dim3);
+        sub(s, dim1 * dim2, a);
+        sub(t, dim3 * dim2, b);
+        iopack->io->send_data(s, sizeof(uint64_t) * dim1 * dim2);
+        iopack->io->send_data(t, sizeof(uint64_t) * dim3 * dim2);
+
+        uint64_t *s1 = new uint64_t[dim1 * dim2];
+        uint64_t *t1 = new uint64_t[dim3 * dim2];
+        iopack->io->recv_data(s1, sizeof(uint64_t) * dim1 * dim2);
+        iopack->io->recv_data(t1, sizeof(uint64_t) * dim3 * dim2);
+
+        for (i = 0; i < dim1 * dim2; i++) {
+            s[i] += s1[i];
+        }
+        for (i = 0; i < dim3 * dim2; i++) {
+            t[i] += t1[i];
+        }
+        
+        // mul(t, dim3 * dim2, a); // at
+        // mul(s, dim1 * dim2, b); // bs
+        uint64_t *Z = new uint64_t[dim1 * dim3];
+        for (i = 0; i < dim1; i++) {
+            for (j = 0; j < dim3; j++) {
+                Z[i * dim3 + j] = c * dim2 + sum(s + i * dim2, dim2) * b + sum(t + j * dim2, dim2) * a;
+                if (party == sci::ALICE) {
+                    Z[i * dim3 + j] += dot(s + i * dim2, t + j * dim2, dim2);
+                }
             }
         }
-        for (auto ptr : Y_T) {
-            delete[] ptr;
-        }
-        Y_T.clear();
+        delete[] s;
+        delete[] t;
+        delete[] s1;
+        delete[] t1;
         return Z;
     }
 };
