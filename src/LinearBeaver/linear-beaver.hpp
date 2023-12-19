@@ -89,12 +89,13 @@ public:
         uint64_t *t = T(Y, dim2, dim3);
         sub(s, dim1 * dim2, a);
         sub(t, dim3 * dim2, b);
+        
         iopack->io->send_data(s, sizeof(uint64_t) * dim1 * dim2);
-        iopack->io->send_data(t, sizeof(uint64_t) * dim3 * dim2);
-
         uint64_t *s1 = new uint64_t[dim1 * dim2];
-        uint64_t *t1 = new uint64_t[dim3 * dim2];
         iopack->io->recv_data(s1, sizeof(uint64_t) * dim1 * dim2);
+        
+        iopack->io->send_data(t, sizeof(uint64_t) * dim3 * dim2);
+        uint64_t *t1 = new uint64_t[dim3 * dim2];
         iopack->io->recv_data(t1, sizeof(uint64_t) * dim3 * dim2);
 
         for (i = 0; i < dim1 * dim2; i++) {
