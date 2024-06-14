@@ -61,7 +61,6 @@ target_link_libraries(SCI-TLM PUBLIC SCI-common SCI-GC SCI-LinearOT
 target_link_libraries(SCI-HE PUBLIC SCI-common SCI-LinearHE)
 
 
-
 target_compile_definitions(SCI-TLM PUBLIC SCI_TLM=1)
 target_compile_definitions(SCI-HE PUBLIC SCI_HE=1)
 
@@ -74,7 +73,7 @@ install(TARGETS
         SCI-BuildingBlocks
         SCI-LinearOT
         SCI-LinearHE
-        SCI-LinearBeaver
+        #SCI-LinearBeaver
         SCI-NonLinear
         SCI-Math
         SCI-Millionaire
@@ -99,7 +98,7 @@ install(DIRECTORY
         Millionaire
         NonLinear
         BuildingBlocks
-        LinearBeaver
+        #LinearBeaver
         LinearOT
         LinearHE
         Math

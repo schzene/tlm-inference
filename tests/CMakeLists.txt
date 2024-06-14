@@ -23,6 +23,6 @@ macro (add_test_HE _name)
 endmacro()
 
 
-add_test_Ring(truncation) #
-add_test_Ring(beaver)
-add_test_Cleartext(math)
+add_test_TLM(truncation) #
+add_test_TLM(beaver)
+add_test_TLM(gen_beaver)
