@@ -1,6 +1,6 @@
-# add_library(SCI-LinearBeaver linear-beaver.cpp)
+add_library(SCI-LinearBeaver INTERFACE)
 
-# target_link_libraries(SCI-LinearBeaver 
-#     PUBLIC
-#     SCI-utils
-# )
+target_link_libraries(SCI-LinearBeaver INTERFACE
+            SCI-utils
+            Eigen3::Eigen
+)

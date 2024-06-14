@@ -49,13 +49,15 @@ target_include_directories(SCI-common
     $<INSTALL_INTERFACE:./>
 )
 
-add_library(SCI-TLM library_fixed.cpp globals.cpp)
+add_library(SCI-TLM library_fixed.cpp globals.cpp globals_float.cpp cleartext_library_fixed.cpp  
+            library_float_common.cpp library_float_secfloat.cpp)
 
 add_library(SCI-HE globals.cpp)
 
 
-target_link_libraries(SCI-TLM PUBLIC SCI-common SCI-GC
+target_link_libraries(SCI-TLM PUBLIC SCI-common SCI-GC SCI-LinearOT
     SCI-Math SCI-BuildingBlocks SCI-FixedPoint SCI-FloatPoint Eigen3::Eigen)
+    
 target_link_libraries(SCI-HE PUBLIC SCI-common SCI-LinearHE)
 
 
@@ -109,12 +111,18 @@ install(DIRECTORY
 
 install(FILES
         "defines.h"
-        # "defines_uniform.h"
+        "defines_uniform.h"
+        "defines_float.h"
+        
         "globals.h"
+        "globals_float.h"
+
+
+        "library_float.h"
         "library_fixed.h"
-        # "library_fixed_uniform.h"
-        # "cleartext_library_fixed.h"
-        # "cleartext_library_fixed_uniform.h"
+
+        "cleartext_library_fixed.h"
+        "cleartext_library_fixed_uniform.h"
         DESTINATION include)
 
 install(FILES

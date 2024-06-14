@@ -1,5 +1,16 @@
 # Build Directory
-build/
-.vscode
-extern
+
+
+# .directory list use / ending 
+.vscode/
+
+# .file use * begining
+*.inp
+*.pyc
+
+
+
+eigen
 SEAL
+build
+__pycache__
